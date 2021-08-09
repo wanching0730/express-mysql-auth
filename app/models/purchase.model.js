@@ -1,16 +1,22 @@
 const {DataTypes} = require("sequelize");
 
 module.exports = (sequelize, Sequelize) => {
-    const Purchase = sequelize.define("purchase", {
-        customer_id: {
+    return sequelize.define("purchase", {
+        id: {
             type: DataTypes.UUID,
+            primaryKey: true
+        },
+        customerEmail: {
+            type: DataTypes.STRING,
+            field: "customer_email",
             references: {
                 model: 'Customer',
-                key: 'id'
+                key: 'email'
             }
         },
-        product_id: {
+        productId: {
             type: Sequelize.STRING,
+            field: "product_id",
             references: {
                 model: 'Product',
                 key: 'id'
@@ -25,15 +31,8 @@ module.exports = (sequelize, Sequelize) => {
         indexes: [
             {
                 unique: true,
-                fields: ['customer_id', 'product_id']
+                fields: ['customer_email', 'product_id']
             }
         ]
     });
-    //
-    // Purchase.associate = function(models) {
-    //     Purchase.belongsTo(models.Customer, {foreignKey: 'customer_id', as: 'customers'});
-    //     Purchase.belongsTo(models.Product, {foreignKey: 'product_id', as: 'products'});
-    // };
-
-    return Purchase;
 };

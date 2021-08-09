@@ -6,11 +6,13 @@ module.exports = (sequelize, Sequelize) => {
                 type: DataTypes.UUID,
                 primaryKey: true
             },
-            first_name: {
-                type: Sequelize.STRING
+            firstName: {
+                type: Sequelize.STRING,
+                field: "first_name"
             },
-            last_name: {
-                type: Sequelize.STRING
+            lastName: {
+                type: Sequelize.STRING,
+                field: "last_name"
             },
             email: {
                 type: Sequelize.STRING
@@ -21,7 +23,7 @@ module.exports = (sequelize, Sequelize) => {
             indexes: [
                 {
                     unique: true,
-                    fields: ['id']
+                    fields: ['email']
                 }
             ]
         });

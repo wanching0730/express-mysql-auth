@@ -2,21 +2,21 @@ const {DataTypes} = require("sequelize");
 
 module.exports = (sequelize, Sequelize) => {
     return sequelize.define("product", {
-            id: {
-                type: DataTypes.STRING,
-                primaryKey: true
-            },
-            name: {
-                type: Sequelize.STRING
-            }
+        id: {
+            type: DataTypes.STRING,
+            primaryKey: true
         },
-        {
-            tableName: 'product',
-            indexes: [
-                {
-                    unique: true,
-                    fields: ['id']
-                }
-            ]
-        });
+        name: {
+            type: Sequelize.STRING
+        }
+    },
+    {
+        tableName: 'product',
+        indexes: [
+            {
+                unique: true,
+                fields: ['id']
+            }
+        ]
+    });
 };
