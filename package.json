@@ -4,6 +4,7 @@
   "description": "Nodejs RESTful API with Express, Sequelize and MySQL",
   "main": "server.js",
   "scripts": {
+    "start": "nodemon",
     "test": "npm run test"
   },
   "keywords": [
@@ -19,5 +20,8 @@
     "express": "^4.17.1",
     "mysql2": "^2.3.0",
     "sequelize": "^6.6.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
   }
 }
