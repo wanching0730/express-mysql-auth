@@ -40,11 +40,16 @@ db.sequelize
         logger.error('Unable to connect to the database: ', err);
     });
 
+// set up routes
+require('./app/routes/purchase.route')(app);
+require('./app/routes/auth.route')(app);
+
+
 // set up error handling
 app.use((err, req, res, next) => {
     if (err instanceof CustomError) {
         // handle custom error message
-        logger.info(err.message);
+        logger.error(err.message);
         res.status(err.statusCode).json(err.message);
     } else {
         // handle general error message thrown from database
@@ -53,9 +58,6 @@ app.use((err, req, res, next) => {
     }
     return next();
 });
-
-// set up routes
-require('./app/routes/purchase.route')(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT;
