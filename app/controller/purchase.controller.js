@@ -6,10 +6,9 @@ const { v4: uuid4 } = require('uuid');
 
 require('dotenv').config();
 
-const db = require("../models");
-const Customer = db.customer;
-const Product = db.product;
-const Purchase = db.purchase;
+const {save} = require("../services/purchase.service");
+const {validateEmail} = require("../utils/validate");
+
 
 module.exports = {
     savePurchase: async (req, res) => {
@@ -21,7 +20,14 @@ module.exports = {
         fs.createReadStream(dest)
             .pipe(csv())
             .on('data', async (row) => {
-                console.log(row);
+                // validation
+                // product ID cannot be empty as it's a Primary Key
+                if(!row.product_id || row.product_id === "")
+                    console.log(`Empty product ID for ${row.product_name}`);
+
+                // email must be in correct format
+                if(!validateEmail(row.email))
+                    console.log(`Invalidd email format for ${row.first_name.concat(' ', row.last_name)}`);
 
                 // save into database
                 const customer = {
@@ -43,20 +49,9 @@ module.exports = {
                     quantity: parseInt(row.quantity)
                 };
 
-                await Customer.findOrCreate({
-                    where: {email: customer.email},
-                    defaults: customer
-                });
-                await Product.findOrCreate({
-                    where: {id: product.id},
-                    defaults: product
-                });
-                await Purchase.create(purchase);
+                await save(customer, product, purchase);
+                res.status(200).send({message: "Data is updated to database successfully"});
             });
-
-
-        // res.status(200).send({message: "downloaded"});
-
     }
 }
 
