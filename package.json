@@ -24,7 +24,9 @@
     "fs": "^0.0.1-security",
     "mysql2": "^2.3.0",
     "sequelize": "^6.6.5",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.5"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"

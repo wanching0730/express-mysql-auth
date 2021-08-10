@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const db = require("./app/models");
 const CustomError = require("./app/utils/custom-error");
+const logger = require("./app/utils/logger")(__filename);
 
 const corsOptions = {origin: `http://localhost:${process.env.PORT}`};
 app.use(cors(corsOptions));
@@ -28,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 db.sequelize
     .authenticate()
     .then(() => {
-        console.log('Connection has been established successfully');
+        logger.info('Connection has been established successfully');
         db.sequelize.sync();
 
         // db.sequelize.sync({ force: true }).then(() => {
@@ -36,19 +37,19 @@ db.sequelize
         // });
     })
     .catch(err => {
-        console.error('Unable to connect to the database: ', err);
+        logger.error('Unable to connect to the database: ', err);
     });
 
 // set up error handling
 app.use((err, req, res, next) => {
     if (err instanceof CustomError) {
         // handle custom error message
+        logger.info(err.message);
         res.status(err.statusCode).json(err.message);
-        console.log(err.message);
     } else {
         // handle general error message thrown from database
+        logger.error(err); // log the full error message
         res.status(500).json(`Errors occur in database: ${err.message}`);
-        console.log(err); // log the full error message
     }
     return next();
 });
@@ -59,5 +60,5 @@ require('./app/routes/purchase.route')(app);
 // set port, listen for requests
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`);
+    logger.info(`Server is running on port ${PORT}.`);
 });
