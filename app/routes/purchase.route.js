@@ -1,9 +1,10 @@
 const {savePurchase, getCustomerPurchase, getAllPurchases, getRegularCustomers, getHighestSalesProducts} = require("../controller/purchase.controller");
+const {asyncHandler} = require("../utils/error-handler");
 
 module.exports = function(app) {
-    app.get("/savePurchase", savePurchase);
-    app.get("/getAllPurchases", getAllPurchases);
-    app.get("/getCustomerPurchase/:id", getCustomerPurchase);
-    app.get("/getRegularCustomers", getRegularCustomers);
-    app.get("/getHighestSalesProducts", getHighestSalesProducts);
+    app.get("/savePurchase", asyncHandler(savePurchase));
+    app.get("/getAllPurchases", asyncHandler(getAllPurchases));
+    app.get("/getCustomerPurchase/:id", asyncHandler(getCustomerPurchase));
+    app.get("/getRegularCustomers", asyncHandler(getRegularCustomers));
+    app.get("/getHighestSalesProducts", asyncHandler(getHighestSalesProducts));
 }
