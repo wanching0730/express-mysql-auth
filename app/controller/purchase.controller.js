@@ -6,7 +6,7 @@ const { v4: uuid4 } = require('uuid');
 
 require('dotenv').config();
 
-const {save} = require("../services/purchase.service");
+const {save, getAllPurchases, getCustomerPurchase, getHighestSalesProducts, getRegularCustomers} = require("../services/purchase.service");
 const {validateEmail} = require("../utils/validate");
 
 
@@ -52,7 +52,28 @@ module.exports = {
                 await save(customer, product, purchase);
                 res.status(200).send({message: "Data is updated to database successfully"});
             });
-    }
+    },
+
+    getAllPurchases: async (req, res) => {
+        const purchases = await getAllPurchases();
+        res.status(200).send({purchases});
+    },
+
+    getCustomerPurchase: async (req, res) => {
+        const purchases = await getCustomerPurchase(req.params.id);
+        res.status(200).send({purchases});
+    },
+
+    getHighestSalesProducts: async (req, res) => {
+        const products = await getHighestSalesProducts();
+        res.status(200).send({products});
+    },
+
+    getRegularCustomers: async (req, res) => {
+        const customers = await getRegularCustomers();
+        res.status(200).send({customers});
+    },
+
 }
 
 async function downloadFile(dest) {

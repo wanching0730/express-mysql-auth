@@ -20,11 +20,11 @@ db.sequelize
     .authenticate()
     .then(() => {
         console.log('Connection has been established successfully');
-        // db.sequelize.sync();
+        db.sequelize.sync();
 
-        db.sequelize.sync({ force: true }).then(() => {
-            console.log("Drop and re-sync db.");
-        });
+        // db.sequelize.sync({ force: true }).then(() => {
+        //     console.log("Drop and re-sync db.");
+        // });
     })
     .catch(err => {
         console.error('Unable to connect to the database: ', err);
