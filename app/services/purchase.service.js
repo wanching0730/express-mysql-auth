@@ -19,14 +19,18 @@ module.exports = {
         if(!product.id || product.id === "") throw new CustomError(400, `Error: Product ID cannot be empty for creation: ${product.name}`);
         if(!validateEmail(customer.email)) throw new CustomError(400, `Error: Invalid email format for customer: ${customer.firstName.concat(' ', customer.lastName)}`);
 
-        await Customer.findOrCreate({
+        const [existingCustomer, customerCreated] = await Customer.findOrCreate({
             where: {email: customer.email},
             defaults: customer
         });
-        await Product.findOrCreate({
+        if(!customerCreated) purchase.customerId = existingCustomer.id;
+
+        const [existingProduct, productCreated] = await Product.findOrCreate({
             where: {id: product.id},
             defaults: product
         });
+        if(!productCreated) purchase.productId = existingProduct.id;
+
         await Purchase.create(purchase);
     },
 

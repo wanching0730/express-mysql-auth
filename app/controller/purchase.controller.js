@@ -13,9 +13,9 @@ const CustomError = require("../utils/custom-error");
 
 module.exports = {
     savePurchase: async (req, res) => {
-        const dest = path.resolve(__dirname, '../data', 'sample.csv');
+        const dest = path.resolve(__dirname, '../data', 'data.csv');
 
-        //await downloadFile(dest);
+        await downloadFile(dest);
 
         // parse csv file
         fs.createReadStream(dest)
