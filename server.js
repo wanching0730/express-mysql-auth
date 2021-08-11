@@ -4,8 +4,8 @@ const app = express();
 
 require('dotenv').config();
 
-const db = require("./app/models");
 const CustomError = require("./app/utils/custom-error");
+const {initDatabase} = require("./app/utils/init-database");
 const logger = require("./app/utils/logger")(__filename);
 
 const corsOptions = {origin: `http://localhost:${process.env.PORT}`};
@@ -26,19 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // initialise database
-db.sequelize
-    .authenticate()
-    .then(() => {
-        logger.info('Connection has been established successfully');
-        db.sequelize.sync();
-
-        // db.sequelize.sync({ force: true }).then(() => {
-        //     console.log("Drop and re-sync db.");
-        // });
-    })
-    .catch(err => {
-        logger.error('Unable to connect to the database: ', err);
-    });
+initDatabase();
 
 // set up routes
 require('./app/routes/purchase.route')(app);

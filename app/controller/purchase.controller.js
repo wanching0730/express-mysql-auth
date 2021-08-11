@@ -9,6 +9,8 @@ require('dotenv').config();
 const {save, getAllPurchases, getCustomerPurchase, getHighestSalesProducts, getRegularCustomers} = require("../services/purchase.service");
 const {validateEmail} = require("../utils/validate");
 
+const logger = require("../utils/logger")(__filename);
+const CustomError = require("../utils/custom-error");
 
 module.exports = {
     savePurchase: async (req, res) => {
@@ -23,11 +25,11 @@ module.exports = {
                 // validation
                 // product ID cannot be empty as it's a Primary Key
                 if(!row.product_id || row.product_id === "")
-                    console.log(`Empty product ID for ${row.product_name}`);
+                    throw new CustomError(400, `Error: Product ID cannot be empty for creation: ${row.product_name}`);
 
                 // email must be in correct format
                 if(!validateEmail(row.email))
-                    console.log(`Invalidd email format for ${row.first_name.concat(' ', row.last_name)}`);
+                    throw new CustomError(400, `Error: Invalid email format for customer: ${row.first_name.concat(' ', row.last_name)}`);
 
                 // save into database
                 const customer = {
@@ -44,7 +46,7 @@ module.exports = {
 
                 const purchase = {
                     id: uuid4(),
-                    customerEmail: row.email,
+                    customerId: customer.id,
                     productId: row.product_id,
                     quantity: parseInt(row.quantity)
                 };
@@ -56,22 +58,22 @@ module.exports = {
 
     getAllPurchases: async (req, res) => {
         const purchases = await getAllPurchases();
-        res.status(200).send({purchases});
+        res.status(200).send(purchases);
     },
 
     getCustomerPurchase: async (req, res) => {
         const purchases = await getCustomerPurchase(req.params.id);
-        res.status(200).send({purchases});
+        res.status(200).send(purchases[0]);
     },
 
     getHighestSalesProducts: async (req, res) => {
         const products = await getHighestSalesProducts();
-        res.status(200).send({products});
+        res.status(200).send(products);
     },
 
     getRegularCustomers: async (req, res) => {
         const customers = await getRegularCustomers();
-        res.status(200).send({customers});
+        res.status(200).send(customers);
     },
 
 }

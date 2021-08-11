@@ -6,12 +6,12 @@ module.exports = (sequelize, Sequelize) => {
             type: DataTypes.UUID,
             primaryKey: true
         },
-        customerEmail: {
-            type: DataTypes.STRING,
-            field: "customer_email",
+        customerId: {
+            type: DataTypes.UUID,
+            field: "customer_id",
             references: {
                 model: 'Customer',
-                key: 'email'
+                key: 'id'
             }
         },
         productId: {
@@ -31,7 +31,7 @@ module.exports = (sequelize, Sequelize) => {
         indexes: [
             {
                 unique: true,
-                fields: ['customer_email', 'product_id']
+                fields: ['customer_id', 'product_id']
             }
         ]
     });

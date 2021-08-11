@@ -4,7 +4,7 @@ const {savePurchase, getCustomerPurchase, getAllPurchases, getRegularCustomers, 
 const {asyncHandler} = require("../utils/error-handler");
 
 module.exports = function(app) {
-    app.use("/admin", [asyncHandler(verifyToken), asyncHandler(isAdmin)]);
+    //app.use("/admin", [asyncHandler(verifyToken), asyncHandler(isAdmin)]);
     app.get("/admin/savePurchase", asyncHandler(savePurchase));
     app.get("/admin/getAllPurchases", asyncHandler(getAllPurchases));
     app.get("/admin/getCustomerPurchase/:id", asyncHandler(getCustomerPurchase));

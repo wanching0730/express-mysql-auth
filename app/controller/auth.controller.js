@@ -4,7 +4,7 @@
 */
 
 const jwt = require("jsonwebtoken");
-const { TokenExpiredError, JsonWebTokenError } = jwt;
+const {TokenExpiredError, JsonWebTokenError} = jwt;
 
 const db = require("../models");
 const User = db.user;
@@ -81,16 +81,16 @@ module.exports = {
 
             const {id, roles, refreshToken} = await findOne(decoded.id);
 
-            if(refreshToken !== req.body.refreshToken)
+            if (refreshToken !== req.body.refreshToken)
                 throw new CustomError(401, "Error: Invalid refresh token");
 
             // generate new access token with user's ID and user's roles
-            const newToken = jwt.sign({ id: id, roles: roles.map(r => r.name) }, secret, {
+            const newToken = jwt.sign({id: id, roles: roles.map(r => r.name)}, secret, {
                 expiresIn: jwtExpiration
             });
 
             // generate new refresh token with user's ID
-            const newRefreshToken = jwt.sign({ id: id }, secret, {
+            const newRefreshToken = jwt.sign({id: id}, secret, {
                 expiresIn: jwtRefreshExpiration
             });
 

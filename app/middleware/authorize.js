@@ -8,7 +8,7 @@ const logger = require("../utils/logger")(__filename);
 
 module.exports = {
     isAdmin: (req, res, next) => {
-        if(res.locals.roles.includes("admin")) {
+        if (res.locals.roles.includes("admin")) {
             logger.audit(`User ${res.locals.id} is authorised as Admin`);
             next();
             return;
