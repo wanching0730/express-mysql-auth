@@ -26,12 +26,14 @@ module.exports = {
         await Purchase.create(purchase);
     },
 
-    getAllPurchases: async() => {
+    getAllPurchases: async(page) => {
+        // assume each page contains 10 records
+        const limit = 10, offset = page * limit - limit;
         return await sequelize.query(
             `SELECT customer.id customer_id, CONCAT(first_name, ' ', last_name) customer_name, email customer_email, product.id product_id, product.name product_name, quantity 
             FROM purchase INNER JOIN customer on purchase.customer_id=customer.id INNER JOIN product ON purchase.product_id=product.id 
-            ORDER BY quantity DESC;`
-            , {type: QueryTypes.SELECT});
+            ORDER BY quantity DESC LIMIT ? OFFSET ?`
+            , {replacements: [limit, offset], type: QueryTypes.SELECT});
     },
 
     getCustomerPurchase: async(customerId) => {

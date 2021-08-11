@@ -57,7 +57,7 @@ module.exports = {
     },
 
     getAllPurchases: async (req, res) => {
-        const purchases = await getAllPurchases();
+        const purchases = await getAllPurchases(req.params.page);
         res.status(200).send(purchases);
     },
 
