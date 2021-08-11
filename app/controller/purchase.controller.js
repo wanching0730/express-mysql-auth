@@ -6,6 +6,7 @@ const { v4: uuid4 } = require('uuid');
 
 require('dotenv').config();
 
+const logger = require("../utils/logger")(__filename);
 const {save, getAllPurchases, getCustomerPurchase, getHighestSalesProducts, getRegularCustomers} = require("../services/purchase.service");
 const {validateEmail} = require("../utils/validate");
 
@@ -15,12 +16,15 @@ module.exports = {
     savePurchase: async (req, res) => {
         const dest = path.resolve(__dirname, '../data', 'data.csv');
 
+        logger.info("Downloading file from the provided URL");
         await downloadFile(dest);
 
         // parse csv file
+        logger.info("Parsing the CSV file into JSON");
         fs.createReadStream(dest)
             .pipe(csv())
             .on('data', async (row) => {
+                logger.info("Inserting row into database");
                 // validation
                 // product ID cannot be empty as it's a Primary Key
                 if(!row.product_id || row.product_id === "")
@@ -58,21 +62,25 @@ module.exports = {
     },
 
     getAllPurchases: async (req, res) => {
+        logger.info("Retrieving all purchase details");
         const purchases = await getAllPurchases(req.params.page);
         res.status(200).send(purchases);
     },
 
     getCustomerPurchase: async (req, res) => {
+        logger.info("Retrieving all single customer's purchase details");
         const purchases = await getCustomerPurchase(req.params.id);
         res.status(200).send(purchases[0]);
     },
 
     getHighestSalesProducts: async (req, res) => {
+        logger.info("Retrieving all products with highest sales");
         const products = await getHighestSalesProducts();
         res.status(200).send(products);
     },
 
     getRegularCustomers: async (req, res) => {
+        logger.info("Retrieving all regular customer details");
         const customers = await getRegularCustomers();
         res.status(200).send(customers);
     },
