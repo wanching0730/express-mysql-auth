@@ -1,7 +1,6 @@
 /*
 Authentication
-1. Verify the token in HTTP header
-2. Generate new access token and refresh token
+1. Verify the access token in HTTP header
 */
 
 const jwt = require("jsonwebtoken");

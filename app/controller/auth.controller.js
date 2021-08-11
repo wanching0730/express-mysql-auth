@@ -1,6 +1,6 @@
 /*
-1. Register: Save new user's details, save new user's role
-2. Login: Check whether user exists in database, verify password, generate an access token and return to user
+1. Register: Save new staff's details, save new staff's role
+2. Login: Check whether the staff exists in database, verify password, generate an access token and refresh token, return to user
 */
 
 const jwt = require("jsonwebtoken");

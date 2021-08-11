@@ -12,10 +12,11 @@ before(async function () {
 
 describe("User Controller", function() {
     describe("Error response for customer and product creation", function () {
-        const purchase = {id: uuid4(), customerEmail: "test", productId: "test", quantity: 1};
+        const customerId = uuid4();
+        const purchase = {id: uuid4(), customerId: customerId, productId: "test", quantity: 1};
 
         it("Should not be able to create new customer record with invalid email", async function () {
-            const customer = {id: uuid4(), firstName: "test", lastName: "test", email: "test"};
+            const customer = {id: customerId, firstName: "test", lastName: "test", email: "test"};
             const product = {id: "test", name: "test"};
             try {
                 await save(customer, product, purchase);
@@ -26,7 +27,7 @@ describe("User Controller", function() {
         });
 
         it("Should not be able to create new product record without product ID", async function () {
-            const customer = {id: uuid4(), firstName: "test", lastName: "test", email: "test@example.com"};
+            const customer = {id: customerId, firstName: "test", lastName: "test", email: "test@example.com"};
             const product = {id: null, name: "test"};
             try {
                 await save(customer, product, purchase);
@@ -37,15 +38,30 @@ describe("User Controller", function() {
         });
     })
 
-    describe("Success response for selection", function () {
+    describe("Success response for creation and selection", function () {
+        it("Should be able to create new customer and product with correct input", async function () {
+            const customerId = uuid4();
+            const customer = {id: customerId, firstName: "test", lastName: "test", email: "test@example.com"};
+            const product = {id: "test", name: "test"};
+            const purchase = {id: uuid4(), customerId: customerId, productId: "test", quantity: 1};
+
+            await save(customer, product, purchase);
+            let result = await getCustomerPurchase(customerId);
+            result = result[0];
+
+            expect(result.customer_id).to.equal(customer.id);
+            expect(result.product_id).to.equal(product.id);
+            expect(result.quantity).to.equal(purchase.quantity);
+        });
+
         it("Should be able to retrieve all purchases", async function () {
             const purchases = await getAllPurchases();
 
-            expect(purchases.length).to.equal(6);
+            expect(purchases.length).to.equal(12);
         });
 
         it("Should be able to retrieve individual customer purchase", async function () {
-            let purchase = await getCustomerPurchase("c9f9a211-bef3-4f96-ba1e-aa501abfc550");
+            let purchase = await getCustomerPurchase("13e4f1a7-7c53-413d-a948-417bf10a8485");
             purchase = purchase[0];
 
             expect(purchase.customer_email).to.equal("marcelene.heaney@kirlinroob.com");

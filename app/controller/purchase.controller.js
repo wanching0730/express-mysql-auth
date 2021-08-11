@@ -9,7 +9,6 @@ require('dotenv').config();
 const {save, getAllPurchases, getCustomerPurchase, getHighestSalesProducts, getRegularCustomers} = require("../services/purchase.service");
 const {validateEmail} = require("../utils/validate");
 
-const logger = require("../utils/logger")(__filename);
 const CustomError = require("../utils/custom-error");
 
 module.exports = {
@@ -52,6 +51,8 @@ module.exports = {
                 };
 
                 await save(customer, product, purchase);
+            })
+            .on('end', async () => {
                 res.status(200).send({message: "Data is updated to database successfully"});
             });
     },
