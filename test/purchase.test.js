@@ -2,13 +2,7 @@ const chai = require("chai");
 const expect = chai.expect;
 const { v4: uuid4 } = require('uuid');
 
-const {initDatabase} = require("../app/utils/init-database");
-
 const {save, getAllPurchases, getHighestSalesProducts, getCustomerPurchase, getRegularCustomers } = require("../app/services/purchase.service");
-
-before(async function () {
-    await initDatabase();
-});
 
 describe("User Controller", function() {
     describe("Error response for customer and product creation", function () {
