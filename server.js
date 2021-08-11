@@ -2,6 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 
+const swaggerUI = require("swagger-ui-express");
+const docs = require('./docs');
+
 require('dotenv').config();
 
 const CustomError = require("./app/utils/custom-error");
@@ -32,7 +35,6 @@ initDatabase();
 require('./app/routes/purchase.route')(app);
 require('./app/routes/auth.route')(app);
 
-
 // set up error handling
 app.use((err, req, res, next) => {
     if (err instanceof CustomError) {
@@ -46,6 +48,9 @@ app.use((err, req, res, next) => {
     }
     return next();
 });
+
+// set up Swagger for API documentation
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(docs));
 
 // set port, listen for requests
 const PORT = process.env.PORT;
