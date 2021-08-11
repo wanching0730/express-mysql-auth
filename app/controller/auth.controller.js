@@ -85,7 +85,7 @@ module.exports = {
                 throw new CustomError(401, "Error: Invalid refresh token");
 
             // generate new access token with user's ID and user's roles
-            const newToken = jwt.sign({id: id, roles: roles.map(r => r.name)}, secret, {
+            const newToken = jwt.sign({id: id, roles: roles}, secret, {
                 expiresIn: jwtExpiration
             });
 

@@ -12,7 +12,7 @@ module.exports = {
     },
     // Find a single user with a user ID
     findOne: async (id) => {
-        const user = await User.findByPk(id, {attributes: {exclude: ['password', 'refreshToken']}});
+        const user = await User.findByPk(id, {attributes: {exclude: ['password']}});
 
         if (!user) throw new CustomError(404, `User not found with user ID: ${id}`);
         return (user);
