@@ -23,7 +23,7 @@ module.exports = {
         const author = req.url.includes("admin") ? "Admin" : "User";
         logger.audit(`${author}: Registering new user`);
 
-        await asyncHandler(verifyNewUser(req.body.id));
+        await verifyNewUser(req.body.id);
 
         const {id, name, password} = req.body;
 
